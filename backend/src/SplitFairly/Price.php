@@ -9,7 +9,7 @@ use App\Invariant\Ensure;
 final readonly class Price implements \Stringable
 {
     public function __construct(
-        public float $value,
+        public int|float $value,
         public string $currency = 'EUR',
     ) {
         Ensure::that('' !== $currency && '0' !== $currency);
