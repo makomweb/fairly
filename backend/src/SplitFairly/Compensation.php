@@ -41,6 +41,6 @@ final class Compensation implements \Stringable
 
     public function __toString(): string
     {
-        return sprintf('From: "%s" - to: "%s" - price: "%s"', $this->from, $this->to, $this->settlement);
+        return sprintf('💸 Compensation "%s" from: "%s" to: "%s"', $this->settlement, $this->from, $this->to);
     }
 }

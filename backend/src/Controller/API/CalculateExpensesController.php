@@ -85,7 +85,7 @@ class CalculateExpensesController extends AbstractController
             ->record('calculate_compensation', $stopwatch->getMillisecondsElapsed(), 'ms');
 
         InstrumentationHolder::getLogging()
-            ->info(sprintf('Calculated: %s (withUser: %s)', $compensation, $withUserEmail ?? 'all'));
+            ->info($compensation);
 
         $data = [
             'users' => array_map(
