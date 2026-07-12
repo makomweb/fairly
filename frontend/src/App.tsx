@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './features/auth/AuthContext'
 import { TrackExpense } from './features/expense/TrackExpense'
 import { Calculation } from './features/calculation/Calculation'
 import { Button } from './components/ui/button'
+import { ThemeSwitcher } from './components/ThemeSwitcher'
 import { HeartHandshake, Loader, Plus } from 'lucide-react'
 
 function AppContent() {
@@ -31,13 +32,14 @@ function AppContent() {
   return (
     <div className="min-h-svh flex flex-col pb-safe">
       {/* Sticky header */}
-      <header className="sticky top-0 z-20 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md">
+      <header className="sticky top-0 z-20 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md dark:from-blue-800 dark:to-indigo-800">
         <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <HeartHandshake className="h-6 w-6 text-white" />
             <h1 className="text-xl font-bold text-white">Split Fairly</h1>
           </div>
           <div className="flex items-center gap-4">
+            <ThemeSwitcher />
             <div className="text-white text-sm">
               {user.email.length > 16 ? user.email.substring(0, 16) + '...' : user.email}
             </div>
@@ -75,7 +77,7 @@ function AppContent() {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 border-t bg-white shadow-lg">
+      <div className="fixed bottom-0 left-0 right-0 z-20 border-t bg-white dark:bg-slate-950 shadow-lg dark:shadow-slate-900 dark:border-slate-700">
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
           <button
             onClick={() => {
@@ -97,7 +99,7 @@ function AppContent() {
                 ? isFormValid
                   ? 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
                   : 'bg-blue-200 text-blue-600 cursor-default opacity-75'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
             }`}
           >
             {showTrackForm ? (isSubmitting ? 'Saving...' : '➕ Track') : '➕ Track'}
@@ -113,7 +115,7 @@ function AppContent() {
                 ? hasUserSelected
                   ? 'bg-blue-600 text-white'
                   : 'bg-blue-200 text-blue-600 opacity-75'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
             }`}
           >
             📊 Calculate
@@ -131,5 +133,3 @@ export default function App() {
     </AuthProvider>
   )
 }
-
-

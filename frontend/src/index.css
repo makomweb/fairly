@@ -75,3 +75,11 @@ body {
     min-width: 44px;
   }
 }
+
+/* Smooth transitions for theme switching */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    @apply transition-colors duration-200;
+  }
+}
+
