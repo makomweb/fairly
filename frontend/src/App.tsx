@@ -3,11 +3,11 @@ import { useState, useRef } from 'react'
 import { AuthProvider, useAuth } from './features/auth/AuthContext'
 import { TrackExpense } from './features/expense/TrackExpense'
 import { Calculation } from './features/calculation/Calculation'
-import { Button } from './components/ui/button'
-import { ThemeSwitcher } from './components/ThemeSwitcher'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { Header } from './components/Header'
+import { Sidebar } from './components/Sidebar'
 import { usePerformanceMetrics } from './hooks/usePerformanceMetrics'
-import { HeartHandshake, Loader, Menu, X } from 'lucide-react'
+import { Loader } from 'lucide-react'
 
 function AppContent() {
   const { user, logout, isLoading } = useAuth()
@@ -24,149 +24,121 @@ function AppContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-svh flex items-center justify-center">
-        <Loader className="h-8 w-8 animate-spin text-blue-600" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <Loader className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
       </div>
     )
   }
 
-  // If no user, AuthContext will have already redirected to /login
   if (!user) {
     return null
   }
 
   return (
-    <div className="min-h-svh flex flex-col pb-safe">
-      {/* Sticky header */}
-      <header className="sticky top-0 z-20 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md dark:from-blue-800 dark:to-indigo-800">
-        <div className="px-4 py-3 sm:py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2 min-w-0">
-            <HeartHandshake className="h-5 sm:h-6 w-5 sm:w-6 text-white flex-shrink-0" />
-            <h1 className="text-lg sm:text-xl font-bold text-white truncate">Split Fairly</h1>
-          </div>
+    <div className="flex h-screen flex-col bg-background">
+      {/* Header */}
+      <Header
+        onMenuToggle={setMobileMenuOpen}
+        userEmail={user.email}
+        onLogout={logout}
+        isMobileMenuOpen={mobileMenuOpen}
+      />
 
-          {/* Desktop Layout */}
-          <div className="hidden md:flex items-center gap-4">
-            <ThemeSwitcher />
-            <div className="text-white text-xs sm:text-sm truncate max-w-xs">
-              {user.email.length > 16 ? user.email.substring(0, 16) + '...' : user.email}
-            </div>
-            <Button 
-              onClick={() => logout()}
-              variant="secondary" 
-              size="sm"
-            >
-              Logout
-            </Button>
-          </div>
+      {/* Main Layout */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <Sidebar
+          isOpen={mobileMenuOpen}
+          activeTab={currentTab}
+          onNavigate={(tab) => {
+            setCurrentTab(tab)
+            setShowTrackForm(tab === 'track')
+            setMobileMenuOpen(false)
+          }}
+          onClose={() => setMobileMenuOpen(false)}
+        />
 
-          {/* Mobile Layout */}
-          <div className="md:hidden flex items-center gap-2">
-            <ThemeSwitcher />
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? (
-                <X className="h-5 w-5 text-white" />
-              ) : (
-                <Menu className="h-5 w-5 text-white" />
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto">
+          <div className="mx-auto w-full h-full max-w-6xl px-4 sm:px-6 lg:px-8 py-6">
+            {/* Content Area */}
+            <div className="h-full">
+              {currentTab === 'calculate' && (
+                <Calculation onUserSelected={setHasUserSelected} />
               )}
-            </button>
-          </div>
-        </div>
+              
+              {currentTab === 'track' && showTrackForm && (
+                <TrackExpense 
+                  ref={trackFormRef}
+                  onComplete={() => setShowTrackForm(false)}
+                  onValidityChange={setIsFormValid}
+                  onLoadingChange={setIsSubmitting}
+                />
+              )}
 
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-white/20 bg-blue-700 dark:bg-blue-900 px-4 py-3 flex flex-col gap-3">
-            <div className="text-white text-sm truncate">
-              {user.email}
+              {currentTab === 'track' && !showTrackForm && (
+                <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+                  <div className="space-y-2">
+                    <p className="text-lg font-medium text-foreground">No expenses yet</p>
+                    <p className="text-sm text-muted-foreground">
+                      Start by adding your first expense
+                    </p>
+                    <button
+                      onClick={() => setShowTrackForm(true)}
+                      className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity"
+                    >
+                      Add Expense
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
-            <Button 
-              onClick={() => {
-                logout()
-                setMobileMenuOpen(false)
-              }}
-              variant="secondary" 
-              size="sm"
-              className="w-full"
-            >
-              Logout
-            </Button>
           </div>
-        )}
-      </header>
-      
-      {/* Main content */}
-      <div className="flex-1 w-full overflow-y-auto">
-        <div className="mx-auto w-full">
-          {currentTab === 'calculate' && (
-            <Calculation onUserSelected={setHasUserSelected} />
-          )}
-          {currentTab === 'track' && !showTrackForm && (
-            <div className="w-full px-4 py-6 md:p-6 flex items-center justify-center min-h-full">
-              <div className="text-center text-muted-foreground">
-                <p className="text-sm md:text-base">Use the "+ Track" button to add a new expense</p>
-              </div>
-            </div>
-          )}
-          {showTrackForm && (
-            <TrackExpense 
-              ref={trackFormRef}
-              onComplete={() => setShowTrackForm(false)}
-              onValidityChange={setIsFormValid}
-              onLoadingChange={setIsSubmitting}
-            />
-          )}
-        </div>
+        </main>
       </div>
 
-      {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 border-t bg-white dark:bg-slate-950 shadow-lg dark:shadow-slate-900 dark:border-slate-700 pb-safe">
-        <div className="px-3 sm:px-4 h-16 flex items-center justify-between gap-2 sm:gap-3">
+      {/* Mobile Bottom Navigation (< md breakpoint) */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card">
+        <div className="flex items-center justify-around h-16">
           <button
             onClick={() => {
-              if (showTrackForm && isFormValid && !isSubmitting) {
-                trackFormRef.current?.submit()
-              } else {
-                setShowTrackForm(true)
-                setCurrentTab('track')
-                setTimeout(() => {
-                  trackFormRef.current?.focus?.()
-                }, 0)
-              }
+              setCurrentTab('track')
+              setShowTrackForm(true)
+              setMobileMenuOpen(false)
             }}
-            className={`flex-1 h-12 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 text-xs sm:text-sm ${
-              showTrackForm
-                ? isFormValid
-                  ? 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
-                  : 'bg-blue-200 text-blue-600 cursor-default opacity-75'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
+            className={`flex flex-col items-center justify-center w-full h-full gap-1 text-xs font-medium transition-colors ${
+              currentTab === 'track'
+                ? 'text-primary bg-muted/30'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            <span className="hidden sm:inline">{showTrackForm ? (isSubmitting ? 'Saving...' : '➕ Track') : '➕ Track'}</span>
-            <span className="sm:hidden">{showTrackForm ? (isSubmitting ? '💾' : '➕') : '➕'}</span>
+            <span className="text-lg">➕</span>
+            <span>Track</span>
           </button>
           
           <button
             onClick={() => {
               setCurrentTab('calculate')
               setShowTrackForm(false)
+              setMobileMenuOpen(false)
             }}
-            className={`flex-1 h-12 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 text-xs sm:text-sm ${
+            className={`flex flex-col items-center justify-center w-full h-full gap-1 text-xs font-medium transition-colors ${
               currentTab === 'calculate'
-                ? hasUserSelected
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-blue-200 text-blue-600 opacity-75'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
+                ? 'text-primary bg-muted/30'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            <span className="hidden sm:inline">📊 Calculate</span>
-            <span className="sm:hidden">📊</span>
+            <span className="text-lg">📊</span>
+            <span>Calculate</span>
           </button>
         </div>
-      </div>
+      </nav>
+
+      {/* Padding for mobile bottom nav */}
+      <div className="md:hidden h-16 pointer-events-none" />
     </div>
   )
 }

@@ -11,20 +11,20 @@ interface AlertProps {
 
 const variantStyles = {
   default: {
-    container: 'bg-blue-50 text-blue-900 dark:bg-blue-950 dark:text-blue-50 border border-blue-200 dark:border-blue-800',
-    icon: 'text-blue-600 dark:text-blue-400',
+    container: 'bg-background border border-border text-foreground',
+    icon: 'text-primary',
   },
   destructive: {
-    container: 'bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-50 border border-red-200 dark:border-red-800',
-    icon: 'text-red-600 dark:text-red-400',
+    container: 'bg-destructive/10 border border-destructive/20 text-destructive',
+    icon: 'text-destructive',
   },
   success: {
-    container: 'bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-50 border border-green-200 dark:border-green-800',
-    icon: 'text-green-600 dark:text-green-400',
+    container: 'bg-accent/10 border border-accent/20 text-accent',
+    icon: 'text-accent',
   },
   warning: {
-    container: 'bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-50 border border-amber-200 dark:border-amber-800',
-    icon: 'text-amber-600 dark:text-amber-400',
+    container: 'bg-foreground/5 border border-foreground/10 text-foreground',
+    icon: 'text-foreground',
   },
 }
 

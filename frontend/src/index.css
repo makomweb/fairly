@@ -4,61 +4,97 @@
 
 @layer base {
   :root {
+    /* Light Mode Colors */
     --background: 0 0% 100%;
-    --foreground: 0 0% 3.6%;
+    --foreground: 0 0% 15%;
+    
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.6%;
+    --card-foreground: 0 0% 15%;
+    
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.6%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 220 90% 56%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --primary: 220 90% 56%;
+    --popover-foreground: 0 0% 15%;
+    
+    --primary: 217 91% 60%;           /* Blue-600 */
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9.0%;
-    --ring: 220 90% 56%;
+    
+    --secondary: 0 0% 96%;            /* Gray-100 */
+    --secondary-foreground: 0 0% 20%;
+    
+    --muted: 0 0% 90%;                /* Gray-200 */
+    --muted-foreground: 0 0% 50%;     /* Gray-500 */
+    
+    --accent: 132 70% 50%;            /* Emerald-500 */
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 84% 60%;         /* Red-600 */
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 0 0% 93%;               /* Gray-200 */
+    --input: 0 0% 98%;                /* Gray-50 */
+    --ring: 217 91% 60%;              /* Blue-600 */
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 0 0% 3.6%;
-    --foreground: 0 0% 98.2%;
-    --card: 0 0% 3.6%;
-    --card-foreground: 0 0% 98.2%;
-    --popover: 0 0% 3.6%;
-    --popover-foreground: 0 0% 98.2%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 220 90% 56%;
-    --accent-foreground: 0 0% 9.0%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 9.0%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --primary: 220 90% 56%;
+    /* Dark Mode Colors */
+    --background: 217 33% 7%;         /* Slate-950 */
+    --foreground: 0 0% 98%;           /* Gray-50 */
+    
+    --card: 217 32% 12%;              /* Slate-900 */
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 217 32% 12%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 217 91% 60%;           /* Blue-600 (brighter in dark) */
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98.2%;
-    --ring: 220 90% 56%;
+    
+    --secondary: 217 32% 18%;         /* Slate-800 */
+    --secondary-foreground: 0 0% 98%;
+    
+    --muted: 217 32% 22%;             /* Slate-700 */
+    --muted-foreground: 0 0% 65%;     /* Gray-400 */
+    
+    --accent: 132 70% 55%;            /* Emerald-500 (lighter) */
+    --accent-foreground: 0 0% 15%;
+    
+    --destructive: 0 84% 65%;         /* Red-500 (lighter) */
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 217 32% 20%;            /* Slate-800 */
+    --input: 217 32% 16%;             /* Slate-900 */
+    --ring: 217 91% 60%;              /* Blue-600 */
+  }
+}
+
+/* Smooth transitions for theme changes */
+@layer base {
+  * {
+    @apply transition-colors duration-200;
+  }
+  
+  /* But not for transform/opacity animations */
+  [data-animate-on-change] {
+    @apply transition-all duration-200;
   }
 }
 
 html {
   scroll-behavior: smooth;
-  /* Better font rendering on mobile */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  /* Prevent pull-to-refresh on mobile */
+  @apply bg-background text-foreground;
   overscroll-behavior-y: contain;
+}
+
+/* Improve tap targets on mobile */
+@media (hover: none) and (pointer: coarse) {
+  button, a, [role="button"] {
+    @apply min-h-11 min-w-11;
+  }
 }
 
 /* Mobile safe area support */
@@ -66,20 +102,41 @@ body {
   .pb-safe {
     padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
-}
-
-/* Improve tap targets on mobile */
-@media (hover: none) and (pointer: coarse) {
-  button, a, [role="button"] {
-    min-height: 44px;
-    min-width: 44px;
+  
+  .pr-safe {
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+  
+  .pl-safe {
+    padding-left: max(1rem, env(safe-area-inset-left));
   }
 }
 
-/* Smooth transitions for theme switching */
-@media (prefers-reduced-motion: no-preference) {
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
   * {
-    @apply transition-colors duration-200;
+    @apply !transition-none !duration-0 !animate-none;
+  }
+  
+  html {
+    @apply scroll-auto;
+  }
+}
+
+/* Focus states for accessibility */
+@layer components {
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  }
+  
+  .dark .focus-ring {
+    @apply focus:ring-offset-background;
+  }
+  
+  /* Smooth scrollbar (Firefox) */
+  * {
+    scrollbar-color: hsl(var(--muted)) hsl(var(--background));
+    scrollbar-width: thin;
   }
 }
 
