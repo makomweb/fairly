@@ -124,6 +124,7 @@ export const TrackExpense = forwardRef<
             onCurrencyChange={setCurrency}
             loading={loading}
             whatInputRef={whatInputRef}
+            isFormValid={isFormValid}
           />
 
           <FormStatusMessages error={error} success={success} />
