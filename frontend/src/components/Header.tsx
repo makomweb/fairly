@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Menu, X, LogOut } from 'lucide-react'
-import { ThemeSwitcher } from './ThemeSwitcher'
+import { Menu, X, LogOut, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface HeaderProps {
@@ -8,13 +7,15 @@ interface HeaderProps {
   userEmail?: string
   onLogout?: () => void
   isMobileMenuOpen?: boolean
+  onSettingsClick?: () => void
 }
 
 export function Header({ 
   onMenuToggle, 
   userEmail,
   onLogout,
-  isMobileMenuOpen = false
+  isMobileMenuOpen = false,
+  onSettingsClick,
 }: HeaderProps) {
   const [showUserMenu, setShowUserMenu] = useState(false)
 
@@ -44,48 +45,53 @@ export function Header({
           </div>
         </div>
 
-        {/* Right: Theme + User Menu */}
-        <div className="flex items-center gap-2">
-          <ThemeSwitcher />
-          
-          {/* User Menu Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-lg transition-colors text-sm truncate max-w-xs"
-              title={userEmail}
-            >
-              <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-primary font-semibold text-xs">
-                  {userEmail?.charAt(0).toUpperCase() || 'U'}
-                </span>
-              </div>
-              <span className="hidden sm:inline text-foreground truncate">
-                {userEmail?.split('@')[0] || 'User'}
+        {/* Right: User Menu */}
+        <div className="relative">
+          <button
+            onClick={() => setShowUserMenu(!showUserMenu)}
+            className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-lg transition-colors text-sm truncate max-w-xs"
+            title={userEmail}
+          >
+            <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-primary font-semibold text-xs">
+                {userEmail?.charAt(0).toUpperCase() || 'U'}
               </span>
-            </button>
+            </div>
+            <span className="hidden sm:inline text-foreground truncate">
+              {userEmail?.split('@')[0] || 'User'}
+            </span>
+          </button>
 
-            {/* Dropdown Menu */}
-            {showUserMenu && (
-              <div className="absolute right-0 mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-50">
-                <div className="px-4 py-3 border-b border-border">
-                  <p className="text-sm font-medium text-foreground truncate">
-                    {userEmail}
-                  </p>
-                </div>
-                <button
-                  onClick={() => {
-                    onLogout?.()
-                    setShowUserMenu(false)
-                  }}
-                  className="w-full px-4 py-2 text-sm text-left hover:bg-muted text-destructive font-medium flex items-center gap-2 rounded-none first:rounded-t-[calc(var(--radius)-2px)] last:rounded-b-[calc(var(--radius)-2px)]"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </button>
+          {/* Dropdown Menu */}
+          {showUserMenu && (
+            <div className="absolute right-0 mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-50">
+              <div className="px-4 py-3 border-b border-border">
+                <p className="text-sm font-medium text-foreground truncate">
+                  {userEmail}
+                </p>
               </div>
-            )}
-          </div>
+              <button
+                onClick={() => {
+                  onSettingsClick?.()
+                  setShowUserMenu(false)
+                }}
+                className="w-full px-4 py-2 text-sm text-left hover:bg-muted text-foreground font-medium flex items-center gap-2 rounded-none first:rounded-t-[calc(var(--radius)-2px)]"
+              >
+                <Settings className="h-4 w-4" />
+                Settings
+              </button>
+              <button
+                onClick={() => {
+                  onLogout?.()
+                  setShowUserMenu(false)
+                }}
+                className="w-full px-4 py-2 text-sm text-left hover:bg-muted text-destructive font-medium flex items-center gap-2 rounded-none last:rounded-b-[calc(var(--radius)-2px)]"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>

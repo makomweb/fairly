@@ -6,6 +6,7 @@ import { Calculation } from './features/calculation/Calculation'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { Header } from './components/Header'
 import { Sidebar } from './components/Sidebar'
+import { SettingsModal } from './components/SettingsModal'
 import { ToastProvider } from './components/ToastProvider'
 import { LoadingSpinner } from './components/LoadingSpinner'
 import { usePerformanceMetrics } from './hooks/usePerformanceMetrics'
@@ -18,6 +19,7 @@ function AppContent() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [hasUserSelected, setHasUserSelected] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const trackFormRef = useRef<{ submit: () => Promise<void> }>(null)
 
   // Monitor Core Web Vitals in development
@@ -43,7 +45,11 @@ function AppContent() {
         userEmail={user.email}
         onLogout={logout}
         isMobileMenuOpen={mobileMenuOpen}
+        onSettingsClick={() => setSettingsOpen(true)}
       />
+
+      {/* Settings Modal */}
+      <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
       {/* Main Layout */}
       <div className="flex flex-1 overflow-hidden">
