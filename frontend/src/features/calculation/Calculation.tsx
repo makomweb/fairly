@@ -7,6 +7,7 @@ import { CompensationCard } from './CompensationCard'
 import { UserExpenseCard } from './UserExpenseCard'
 import { DownloadReportButton } from './DownloadReportButton'
 import { EmptyState } from './EmptyState'
+import { LoadingSpinner, CardSkeleton } from '@/components/LoadingSpinner'
 
 export function Calculation({ onUserSelected }: { onUserSelected?: (selected: boolean) => void }) {
   const [data, setData] = useState<CalculationResponse | null>(null)
@@ -72,69 +73,14 @@ export function Calculation({ onUserSelected }: { onUserSelected?: (selected: bo
     }
   }, [selectedUser])
 
-  if (loading) {
-    return (
-      <div className="w-full p-4 md:p-6">
-        <div className="max-w-2xl mx-auto">
-          <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-            <div className="animate-pulse mb-3 text-3xl">💰</div>
-            <p>Loading calculation...</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="w-full p-4 md:p-6 pb-64 md:pb-96">
-        <div className="max-w-2xl mx-auto space-y-4">
-          {/* Person Selector - Always visible at top */}
-          <Card>
-            <CardContent className="pt-6">
-              <div className="space-y-2">
-                <label htmlFor="person-select" className="text-base font-semibold">
-                  💰 Settle up with:
-                </label>
-                <select
-                  id="person-select"
-                  value={selectedUser}
-                  onChange={(e) => setSelectedUser(e.target.value)}
-                  disabled={usersLoading || loading}
-                  className="w-full h-12 rounded-md border-2 border-input bg-background px-3 text-base ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <option value="">{usersLoading ? 'Loading users...' : 'Select a person...'}</option>
-                  {users.map((user) => (
-                    <option key={user.id} value={user.email}>
-                      {user.email}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-destructive">
-            <CardContent className="pt-6">
-              <p className="text-destructive text-center mb-4">{error}</p>
-              <Button onClick={() => loadCalculation(selectedUser)} className="w-full" variant="outline">
-                🔄 Retry
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="w-full p-4 md:p-6 pb-64 md:pb-96">
+    <div className="w-full p-4 md:p-6 pb-64 md:pb-96 animate-in fade-in duration-300">
       <div className="max-w-2xl mx-auto space-y-4">
         {/* Person Selector - Always visible at top */}
         <Card>
           <CardContent className="pt-6">
             <div className="space-y-2">
-              <label htmlFor="person-select" className="text-base font-semibold">
+              <label htmlFor="person-select" className="text-base font-semibold text-foreground">
                 💰 Settle up with:
               </label>
               <select
@@ -155,39 +101,72 @@ export function Calculation({ onUserSelected }: { onUserSelected?: (selected: bo
           </CardContent>
         </Card>
 
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-            <div className="animate-pulse mb-3 text-3xl">💰</div>
-            <p>Loading calculation...</p>
+        {/* Loading State */}
+        {loading && (
+          <div className="py-12">
+            <LoadingSpinner message="Loading calculation..." />
           </div>
-        ) : !selectedUser ? (
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
+          <Card className="border-destructive">
+            <CardContent className="pt-6">
+              <p className="text-destructive text-center mb-4">{error}</p>
+              <Button onClick={() => loadCalculation(selectedUser)} className="w-full" variant="outline">
+                🔄 Retry
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Empty State */}
+        {!loading && !error && !selectedUser && (
           <EmptyState 
             title="Select a person to begin"
             description="Choose who you want to settle up with"
             emoji="👥"
           />
-        ) : !data || data.users.length === 0 ? (
+        )}
+
+        {/* No Data State */}
+        {!loading && !error && selectedUser && !data?.users.length && (
           <EmptyState 
             title="No expenses to settle."
             description="No transactions between you and this person."
             emoji="✨"
           />
-        ) : (
+        )}
+
+        {/* Results */}
+        {!loading && data && data.users.length > 0 && (
           <>
             {data.compensation && (
-              <CompensationCard
-                from={data.compensation.from}
-                to={data.compensation.to}
-                value={data.compensation.settlement.value}
-                currency={data.compensation.settlement.currency}
-              />
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <CompensationCard
+                  from={data.compensation.from}
+                  to={data.compensation.to}
+                  value={data.compensation.settlement.value}
+                  currency={data.compensation.settlement.currency}
+                />
+              </div>
             )}
 
-            {data.users.map((expenses) => (
-              <UserExpenseCard key={expenses.user_email} expenses={expenses} />
-            ))}
+            <div className="space-y-4 animate-in fade-in duration-500 delay-100">
+              {data.users.map((expenses, idx) => (
+                <div 
+                  key={expenses.user_email}
+                  style={{ animationDelay: `${(idx + 1) * 100}ms` }}
+                  className="animate-in fade-in slide-in-from-bottom-4 duration-500"
+                >
+                  <UserExpenseCard expenses={expenses} />
+                </div>
+              ))}
+            </div>
 
-            <DownloadReportButton id={data.id}/>
+            <div className="mt-6 animate-in fade-in duration-500 delay-300">
+              <DownloadReportButton id={data.id}/>
+            </div>
           </>
         )}
       </div>

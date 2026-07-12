@@ -6,8 +6,9 @@ import { Calculation } from './features/calculation/Calculation'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { Header } from './components/Header'
 import { Sidebar } from './components/Sidebar'
+import { ToastProvider } from './components/ToastProvider'
+import { LoadingSpinner } from './components/LoadingSpinner'
 import { usePerformanceMetrics } from './hooks/usePerformanceMetrics'
-import { Loader } from 'lucide-react'
 
 function AppContent() {
   const { user, logout, isLoading } = useAuth()
@@ -25,10 +26,7 @@ function AppContent() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-4">
-          <Loader className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
+        <LoadingSpinner message="Loading..." />
       </div>
     )
   }
@@ -65,7 +63,7 @@ function AppContent() {
         <main className="flex-1 overflow-y-auto">
           <div className="mx-auto w-full h-full max-w-6xl px-4 sm:px-6 lg:px-8 py-6">
             {/* Content Area */}
-            <div className="h-full">
+            <div className="h-full animate-in fade-in duration-300">
               {currentTab === 'calculate' && (
                 <Calculation onUserSelected={setHasUserSelected} />
               )}
@@ -80,15 +78,16 @@ function AppContent() {
               )}
 
               {currentTab === 'track' && !showTrackForm && (
-                <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-                  <div className="space-y-2">
+                <div className="flex flex-col items-center justify-center min-h-[400px] text-center animate-in fade-in">
+                  <div className="space-y-4">
+                    <div className="text-5xl">✨</div>
                     <p className="text-lg font-medium text-foreground">No expenses yet</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground mb-6">
                       Start by adding your first expense
                     </p>
                     <button
                       onClick={() => setShowTrackForm(true)}
-                      className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity"
+                      className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-all active:scale-95"
                     >
                       Add Expense
                     </button>
@@ -147,7 +146,9 @@ export default function App() {
   return (
     <ErrorBoundary>
       <AuthProvider>
-        <AppContent />
+        <ToastProvider>
+          <AppContent />
+        </ToastProvider>
       </AuthProvider>
     </ErrorBoundary>
   )

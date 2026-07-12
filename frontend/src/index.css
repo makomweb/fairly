@@ -123,6 +123,72 @@ body {
   }
 }
 
+/* Animations */
+@layer utilities {
+  @keyframes slide-in-from-right {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-in-from-bottom {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-in {
+    animation: fade-in 0.3s ease-out forwards;
+  }
+
+  .fade-in {
+    animation: fade-in 0.3s ease-out forwards;
+  }
+
+  .slide-in-from-right-4 {
+    animation: slide-in-from-right 0.3s ease-out forwards;
+  }
+
+  .slide-in-from-bottom-4 {
+    animation: slide-in-from-bottom 0.3s ease-out forwards;
+  }
+
+  .duration-300 {
+    animation-duration: 0.3s;
+  }
+
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+}
+
 /* Focus states for accessibility */
 @layer components {
   .focus-ring {
