@@ -49,7 +49,7 @@ final class CompensationTest extends TestCase
         self::assertSame(12.5, $compensation->settlement->value);
         self::assertSame('EUR', $compensation->settlement->currency);
         self::assertSame(
-            sprintf('From: "%s" - to: "%s" - price: "%s"', $compensation->from, $compensation->to, (string) $compensation->settlement),
+            sprintf('💸 Compensation "%s" from: "%s" to: "%s"', (string) $compensation->settlement, $compensation->from, $compensation->to),
             (string) $compensation
         );
     }
