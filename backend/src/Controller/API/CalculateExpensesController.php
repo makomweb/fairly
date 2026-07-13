@@ -3,12 +3,10 @@
 namespace App\Controller\API;
 
 use App\Async\Stopwatch;
+use App\Entity\User;
 use App\Instrumentation\InstrumentationHolder;
-use App\Invariant\Ensure;
 use App\Repository\UserRepository;
-use App\SplitFairly\Calculator;
-use App\SplitFairly\Compensation;
-use App\SplitFairly\Expenses;
+use App\SplitFairly\CalculateCompensation;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class CalculateExpensesController extends AbstractController
 {
     public function __construct(
-        private readonly Calculator $calculator,
+        private readonly CalculateCompensation $calculator,
         private readonly UserRepository $userRepository,
     ) {
     }
@@ -30,77 +28,43 @@ class CalculateExpensesController extends AbstractController
         $stopwatch = Stopwatch::start();
 
         $currentUser = $this->getUser();
-        if (!$currentUser instanceof \Symfony\Component\Security\Core\User\UserInterface) {
+        if (!$currentUser instanceof User) {
             return $this->json([
                 'error' => 'Please login first!',
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        $expenses = $this->calculator->calculate();
-        Ensure::that(!empty($expenses), 'Track your expenses first!');
-
         // Check if specific user requested
         $withUserEmail = $request->query->get('with_user');
 
+        $withUser = null;
+
         if ($withUserEmail) {
             // Find the specific user to calculate with
-            $selectedUser = $this->userRepository->findOneBy(['email' => $withUserEmail]);
-            if (!$selectedUser instanceof \App\Entity\User) {
+            $withUser = $this->userRepository->findOneBy(['email' => $withUserEmail]);
+            if (!$withUser instanceof User) {
                 return $this->json([
                     'error' => sprintf('User %s not found!', $withUserEmail),
                 ], Response::HTTP_BAD_REQUEST);
             }
-
-            // Prevent self-calculation
-            if ($selectedUser->getEmail() === $currentUser->getUserIdentifier()) {
-                return $this->json([
-                    'error' => 'Cannot settle up with yourself!',
-                ], Response::HTTP_BAD_REQUEST);
-            }
-
-            // Filter expenses to only the current user and selected user
-            $currentUserExpenses = null;
-            $selectedUserExpenses = null;
-
-            foreach ($expenses as $expense) {
-                if ($expense->userEmail === $currentUser->getUserIdentifier()) {
-                    $currentUserExpenses = $expense;
-                } elseif ($expense->userEmail === $selectedUser->getEmail()) {
-                    $selectedUserExpenses = $expense;
-                }
-            }
-
-            // if (!$currentUserExpenses || !$selectedUserExpenses) {
-            //     return $this->json([
-            //         'error' => 'Could not find expenses for selected users',
-            //     ], Response::HTTP_BAD_REQUEST);
-            // }
-
-            $expenses = [$currentUserExpenses, $selectedUserExpenses];
         }
 
-        $compensation = Compensation::calculate($expenses[0], $expenses[1]);
+        assert($withUser instanceof User);
+
+        $result = $this->calculator->calculate(
+            $currentUser->getUuid(),
+            $withUser->getUuid()
+        );
 
         InstrumentationHolder::getMetrics()
             ->record('calculate_compensation', $stopwatch->getMillisecondsElapsed(), 'ms');
 
         InstrumentationHolder::getLogging()
-            ->info($compensation);
+            ->info($result['compensation']);
 
-        $data = [
-            'users' => array_map(
-                static fn (Expenses $e) => [
-                    'user_email' => $e->userEmail,
-                    'categories' => $e->categories(),
-                ],
-                $expenses
-            ),
-            'compensation' => $compensation,
-        ];
-
-        $json = json_encode($data);
+        $json = json_encode($result);
         assert(is_string($json));
 
-        return $this->json([...$data, 'id' => hash('sha256', $json)]);
+        return $this->json([...$result, 'id' => hash('sha256', $json)]);
     }
 }

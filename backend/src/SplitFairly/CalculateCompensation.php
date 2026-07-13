@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\SplitFairly;
 
+use App\Invariant\Ensure;
+
 final readonly class CalculateCompensation
 {
     public function __construct(
@@ -13,27 +15,43 @@ final readonly class CalculateCompensation
     ) {
     }
 
-    public function calculate(string $user, string $with): Compensation
+    /**
+     * @return array{
+     *  compensation: Compensation
+     * }
+     */
+    public function calculate(string $user, string $with): array
     {
-        return Compensation::calculate(
-            $this->getExpenses($user),
-            $this->getExpenses($with)
-        );
+        Ensure::that($user !== $with, 'Cannot settle with yourself!');
+
+        $expensesUser = $this->getExpenses($user);
+        $expensesWith = $this->getExpenses($with);
+
+        return [
+            'users' => array_map(
+                static fn (Expenses $e) => [
+                    'user_email' => $e->userEmail,
+                    'categories' => $e->categories(),
+                ],
+                [$expensesUser, $expensesWith]
+            ),
+            'compensation' => Compensation::calculate($expensesUser, $expensesWith),
+        ];
     }
 
-    private function getExpenses(string $user): Expenses
+    private function getExpenses(string $userId): Expenses
     {
         $events = $this->eventStore->getEvents(
             new QueryOptions(
-                createdBy: [$user],
+                createdBy: [$userId],
                 subjectTypes: ['Expense'],
                 eventTypes: ['tracked']
             )
         );
 
-        $email = $this->emailProvider->getEmailFor($user);
+        $email = $this->emailProvider->getEmailFor($userId);
 
-        return array_reduce($events, $this->reduce(...), Expenses::initial($user, $email));
+        return array_reduce($events, $this->reduce(...), Expenses::initial($userId, $email));
     }
 
     private function reduce(Expenses $expenses, Event $event): Expenses
