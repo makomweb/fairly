@@ -105,6 +105,7 @@
         }
     },
     "require-dev": {
+        "ahmed-bhs/doctrine-doctor": "^2.9",
         "deptrac/deptrac": "^4.6.2",
         "friendsofphp/php-cs-fixer": "^3.95.13",
         "phpstan/phpstan": "^2.2.5",
