@@ -53,7 +53,13 @@ class Report
 
     public function setStatus(string $status): self
     {
+        assert(in_array($status, [self::STATUS_COMPLETED, self::STATUS_FAILED, self::STATUS_GENERATING, self::STATUS_PENDING]));
+        
         $this->status = $status;
+
+        if ($status === self::STATUS_COMPLETED) {
+            $this->completedAt = new \DateTimeImmutable();
+        }
 
         return $this;
     }
@@ -78,13 +84,6 @@ class Report
     public function getCompletedAt(): ?\DateTimeImmutable
     {
         return $this->completedAt;
-    }
-
-    public function setCompletedAt(\DateTimeImmutable $completedAt): self
-    {
-        $this->completedAt = $completedAt;
-
-        return $this;
     }
 
     public function getErrorMessage(): ?string

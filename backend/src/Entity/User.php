@@ -24,7 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Uuid $uuid;
 
     #[ORM\Column(length: 180)]
-    private ?string $email = null;
+    private string $email;
 
     /**
      * @var string[]
@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    private ?string $password = null;
+    private string $password;
 
     public function __construct()
     {
@@ -65,13 +65,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->uuid;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
 
     public function setEmail(string $email): void
     {
+        assert(!empty($email));
+
         $this->email = $email;
     }
 
@@ -118,13 +120,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
 
     public function setPassword(string $password): void
     {
+        assert(!empty($password));
+
         $this->password = $password;
     }
 
