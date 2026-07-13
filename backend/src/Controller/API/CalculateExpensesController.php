@@ -37,7 +37,7 @@ class CalculateExpensesController extends AbstractController
         }
 
         $expenses = $this->calculator->calculate();
-        Ensure::that(2 === count($expenses), 'Track your expenses first!');
+        Ensure::that(!empty($expenses), 'Track your expenses first!');
 
         // Check if specific user requested
         $withUserEmail = $request->query->get('with_user');
@@ -70,11 +70,11 @@ class CalculateExpensesController extends AbstractController
                 }
             }
 
-            if (!$currentUserExpenses || !$selectedUserExpenses) {
-                return $this->json([
-                    'error' => 'Could not find expenses for selected users',
-                ], Response::HTTP_BAD_REQUEST);
-            }
+            // if (!$currentUserExpenses || !$selectedUserExpenses) {
+            //     return $this->json([
+            //         'error' => 'Could not find expenses for selected users',
+            //     ], Response::HTTP_BAD_REQUEST);
+            // }
 
             $expenses = [$currentUserExpenses, $selectedUserExpenses];
         }

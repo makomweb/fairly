@@ -16,9 +16,9 @@ final class Expenses
     ) {
     }
 
-    public static function initial(string $userUuid, string $email): self
+    public static function initial(string $userUuid, string $userEmail): self
     {
-        return new self($userUuid, $email, []);
+        return new self($userUuid, $userEmail, []);
     }
 
     public function add(Expense $expense): void
