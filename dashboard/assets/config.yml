@@ -1,16 +1,8 @@
-title: "Developer Dashboard"
-subtitle: "Split Fairly"
-
-message:
-  style: "is-info"
-  title: "Welcome!"
-  icon: "fa-solid fa-circle-info"
-  content: "Split Fairly - splitting fairly made easy."
+title: "Split Fairly"
+subtitle: "Developer Dashboard"
 
 header: true
 footer: '<p>Created with ☯️ by <a href="https://github.com/makomweb/">Martin Komischke</a></p>'
-
-theme: default
 
 services:
   - name: "Application"
@@ -30,6 +22,11 @@ services:
         subtitle: "EasyAdmin (requires admin credentials)"
         icon: "fa-solid fa-users-cog"
         url: "http://localhost:8080/admin"
+        target: "_blank"
+      - name: "Profiler"
+        subtitle: "Symfony Profiler"
+        icon: "fas fa-bug"
+        url: "http://localhost:8080/_profiler"
         target: "_blank"
 
   - name: "Persistence"
