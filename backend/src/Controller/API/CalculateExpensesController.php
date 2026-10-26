@@ -52,8 +52,8 @@ class CalculateExpensesController extends AbstractController
         assert($withUser instanceof User);
 
         $result = $this->calculator->calculate(
-            $currentUser->getUuid(),
-            $withUser->getUuid()
+            (string) $currentUser->getUuid(),
+            (string) $withUser->getUuid()
         );
 
         InstrumentationHolder::getMetrics()

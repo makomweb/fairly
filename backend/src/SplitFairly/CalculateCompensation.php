@@ -20,12 +20,12 @@ final readonly class CalculateCompensation
      *  compensation: Compensation
      * }
      */
-    public function calculate(string $user, string $with): array
+    public function calculate(string $currentUserId, string $withUserId): array
     {
-        Ensure::that($user !== $with, 'Cannot settle with yourself!');
+        Ensure::that($currentUserId !== $withUserId, 'Cannot settle with yourself!');
 
-        $expensesUser = $this->getExpenses($user);
-        $expensesWith = $this->getExpenses($with);
+        $expensesUser = $this->getExpenses($currentUserId);
+        $expensesWith = $this->getExpenses($withUserId);
 
         return [
             'users' => array_map(
