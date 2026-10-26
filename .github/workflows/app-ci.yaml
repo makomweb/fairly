@@ -36,7 +36,7 @@ jobs:
         run: composer install --prefer-dist --no-scripts
 
       - name: Run static code analysis
-        run: vendor/bin/phpstan analyse
+        run: vendor/bin/phpstan analyse --memory-limit=1G
 
       - name: Run code style checks
         run: vendor/bin/php-cs-fixer check
@@ -53,7 +53,7 @@ jobs:
         run: vendor/bin/phpunit
 
       - name: Run architecture analysis
-        run: vendor/bin/deptrac analyse
+        run: vendor/bin/deptrac analyse --report-uncovered
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
