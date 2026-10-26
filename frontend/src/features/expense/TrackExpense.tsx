@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { trackExpense } from '@/features/expense/api'
 import { ExpenseFormFields } from '@/features/expense/ExpenseFormFields'
 import { FormStatusMessages } from '@/features/expense/FormStatusMessages'
+import { useToast } from '@/components/ToastProvider'
 
 interface TrackExpenseProps {
   onComplete?: () => void
@@ -14,6 +15,7 @@ export const TrackExpense = forwardRef<
   { submit: () => Promise<void> },
   TrackExpenseProps
 >(({ onComplete, onValidityChange, onLoadingChange }, ref) => {
+  const { addToast } = useToast()
   const [price, setPrice] = useState('')
   const [currency, setCurrency] = useState('EUR')
   const [what, setWhat] = useState('')
@@ -82,6 +84,7 @@ export const TrackExpense = forwardRef<
         location,
       })
       setSuccess(true)
+      addToast('✓ Expense tracked successfully!', 'success', 3000)
       // Clear form (but keep "what" for lent expenses)
       if (type !== 'Lent') {
         setWhat('')
@@ -93,7 +96,9 @@ export const TrackExpense = forwardRef<
         whatInputRef.current?.focus()
       }, 0)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to track expense')
+      const errorMsg = err instanceof Error ? err.message : 'Failed to track expense'
+      setError(errorMsg)
+      addToast(errorMsg, 'error', 5000)
     } finally {
       setLoading(false)
       onLoadingChange?.(false)
@@ -101,9 +106,9 @@ export const TrackExpense = forwardRef<
   }
 
   return (
-    <div className="w-full p-4 md:p-6 pb-24">
+    <div className="w-full p-4 md:p-6 pb-24 animate-in fade-in duration-300">
       <div className="max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold mb-6">Track Expense</h2>
+        <h2 className="text-2xl font-bold mb-6 text-foreground">Track Expense</h2>
         
         <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
           <ExpenseFormFields
@@ -119,6 +124,7 @@ export const TrackExpense = forwardRef<
             onCurrencyChange={setCurrency}
             loading={loading}
             whatInputRef={whatInputRef}
+            isFormValid={isFormValid}
           />
 
           <FormStatusMessages error={error} success={success} />

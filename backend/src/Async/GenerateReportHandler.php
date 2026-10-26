@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Async;
 
 use App\Entity\Report;
+use App\Fairly\Calculator;
+use App\Fairly\Compensation;
 use App\Instrumentation\Instrumentation;
 use App\Invariant\Ensure;
 use App\Repository\ReportRepository;
-use App\SplitFairly\Calculator;
-use App\SplitFairly\Compensation;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -74,7 +74,6 @@ final readonly class GenerateReportHandler
 
             $report->setFilePath($filePath);
             $report->setStatus(Report::STATUS_COMPLETED);
-            $report->setCompletedAt(new \DateTimeImmutable());
             $this->entityManager->flush();
 
             $this->instrumentation->getLogging()->info(sprintf(
@@ -91,7 +90,6 @@ final readonly class GenerateReportHandler
             if ($report instanceof Report) {
                 $report->setStatus(Report::STATUS_FAILED);
                 $report->setErrorMessage($exception->getMessage());
-                $report->setCompletedAt(new \DateTimeImmutable());
                 $this->entityManager->flush();
             }
 

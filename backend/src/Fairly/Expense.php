@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\SplitFairly;
+namespace App\Fairly;
 
 use App\Invariant\Ensure;
 use Symfony\Component\Uid\Uuid;

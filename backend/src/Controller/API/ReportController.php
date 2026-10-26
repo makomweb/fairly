@@ -103,7 +103,7 @@ final class ReportController extends AbstractController
             Response::HTTP_OK,
             [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="split-fairly-calculation.pdf"',
+                'Content-Disposition' => 'attachment; filename="fairly-calculation.pdf"',
             ]
         );
     }

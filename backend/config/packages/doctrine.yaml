@@ -30,6 +30,9 @@ when@test:
 when@prod:
     doctrine:
         orm:
+            metadata_cache_driver:
+                type: pool
+                pool: doctrine.system_cache_pool
             query_cache_driver:
                 type: pool
                 pool: doctrine.system_cache_pool
@@ -41,6 +44,7 @@ when@prod:
         cache:
             pools:
                 doctrine.result_cache_pool:
-                    adapter: cache.app
+                    adapter: cache.adapter.apcu
+                    default_lifetime: 3600
                 doctrine.system_cache_pool:
-                    adapter: cache.system
+                    adapter: cache.adapter.apcu  # or cache.adapter.redis

@@ -31,7 +31,7 @@ parameters:
 			path: src/Instrumentation/InstrumentationHolder.php
 
 		-
-			message: '#^Method App\\Normalizer\\Normalizer\:\:toArray\(\) should return array\<string, mixed\> but returns array\|ArrayObject\|bool\|float\|int\|string\|null\.$#'
+			message: '#^Method App\\Normalizer\\Normalizer\:\:toArray\(\) should return array\<string, mixed\> but returns array\<mixed\>\|ArrayObject\<\(int\|string\), mixed\>\|bool\|float\|int\|string\|null\.$#'
 			identifier: return.type
 			count: 1
 			path: src/Normalizer/Normalizer.php

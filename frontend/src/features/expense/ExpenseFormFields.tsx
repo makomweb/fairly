@@ -2,6 +2,7 @@ import { useEffect, useState, forwardRef } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { RadioGroup, RadioOption } from '@/components/ui/radio'
 import { fetchUsers, type User } from '@/features/expense/api'
 
@@ -18,6 +19,7 @@ interface ExpenseFormFieldsProps {
   onCurrencyChange: (value: string) => void
   loading: boolean
   whatInputRef?: React.RefObject<HTMLInputElement>
+  isFormValid?: boolean
 }
 
 export function ExpenseFormFields({
@@ -33,6 +35,7 @@ export function ExpenseFormFields({
   onCurrencyChange,
   loading,
   whatInputRef,
+  isFormValid = false,
 }: ExpenseFormFieldsProps) {
   const [users, setUsers] = useState<User[]>([])
   const [usersLoading, setUsersLoading] = useState(false)
@@ -155,6 +158,22 @@ export function ExpenseFormFields({
           />
         )}
       </div>
+
+      {/* Submit Button */}
+      <Button
+        type="submit"
+        disabled={!isFormValid || loading}
+        className="w-full h-12 text-base font-semibold"
+      >
+        {loading ? (
+          <>
+            <span className="animate-spin mr-2">⏳</span>
+            Saving...
+          </>
+        ) : (
+          '✓ Add Expense'
+        )}
+      </Button>
     </>
   )
 }

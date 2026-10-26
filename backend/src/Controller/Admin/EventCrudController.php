@@ -3,8 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Event as EventEntity;
+use App\Fairly\EventStoreInterface;
 use App\Form\DataTransformer\JsonToStringTransformer;
-use App\SplitFairly\EventStoreInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -133,6 +134,7 @@ class EventCrudController extends AbstractCrudController
 
     /** @param AdminContext<EventEntity> $context */
     #[IsGranted('ROLE_ADMIN')]
+    #[AdminRoute]
     public function wipeEvents(AdminContext $context): RedirectResponse
     {
         $this->eventRepository->reset();

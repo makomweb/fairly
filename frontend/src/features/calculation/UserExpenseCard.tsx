@@ -80,12 +80,12 @@ export function UserExpenseCard({ expenses }: UserExpenseCardProps) {
                 {lentCategories.map((category, idx) => (
                   <div
                     key={idx}
-                    className="flex justify-between items-center gap-3 p-3 bg-amber-50 rounded-lg border border-amber-200"
+                   className="flex justify-between items-center gap-3 p-3 bg-muted rounded-lg border border-border hover:bg-muted/80 transition-colors"
                   >
-                    <span className="font-medium text-sm truncate">
+                   <span className="font-medium text-sm truncate text-foreground">
                       {category.type}
                     </span>
-                    <span className="font-mono text-sm shrink-0 text-amber-900">
+                   <span className="font-mono text-sm shrink-0 text-foreground font-semibold">
                       {category.sum.value.toFixed(2)} {category.sum.currency}
                     </span>
                   </div>

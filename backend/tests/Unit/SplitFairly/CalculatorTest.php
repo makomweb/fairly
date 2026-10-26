@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\SplitFairly;
+namespace App\Tests\Unit\Fairly;
 
-use App\SplitFairly\Calculator;
-use App\SplitFairly\DenormalizerInterface;
-use App\SplitFairly\EmailProviderInterface;
-use App\SplitFairly\Event;
-use App\SplitFairly\EventStoreInterface;
-use App\SplitFairly\Expense;
-use App\SplitFairly\Expenses;
-use App\SplitFairly\Price;
-use App\SplitFairly\QueryOptions;
+use App\Fairly\Calculator;
+use App\Fairly\DenormalizerInterface;
+use App\Fairly\EmailProviderInterface;
+use App\Fairly\Event;
+use App\Fairly\EventStoreInterface;
+use App\Fairly\Expense;
+use App\Fairly\Expenses;
+use App\Fairly\Price;
+use App\Fairly\QueryOptions;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 

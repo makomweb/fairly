@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\SplitFairly;
+namespace App\Tests\Unit\Fairly;
 
-use App\SplitFairly\Compensation;
-use App\SplitFairly\Expense;
-use App\SplitFairly\Expenses;
-use App\SplitFairly\Price;
+use App\Fairly\Compensation;
+use App\Fairly\Expense;
+use App\Fairly\Expenses;
+use App\Fairly\Price;
 use PHPUnit\Framework\TestCase;
 
 final class CompensationTest extends TestCase
@@ -49,7 +49,7 @@ final class CompensationTest extends TestCase
         self::assertSame(12.5, $compensation->settlement->value);
         self::assertSame('EUR', $compensation->settlement->currency);
         self::assertSame(
-            sprintf('From: "%s" - to: "%s" - price: "%s"', $compensation->from, $compensation->to, (string) $compensation->settlement),
+            sprintf('💸 Compensation "%s" from: "%s" to: "%s"', (string) $compensation->settlement, $compensation->from, $compensation->to),
             (string) $compensation
         );
     }

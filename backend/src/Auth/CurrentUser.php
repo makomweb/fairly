@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Auth;
 
 use App\Entity\User;
-use App\SplitFairly\CurrentUserInterface;
+use App\Fairly\CurrentUserInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
 final readonly class CurrentUser implements CurrentUserInterface

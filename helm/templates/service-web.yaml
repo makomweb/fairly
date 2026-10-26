@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "split-fairly.fullname" . }}-web
+  name: {{ include "fairly.fullname" . }}-web
 spec:
   type: {{ .Values.service.web.type }}
   selector:
-    app: {{ include "split-fairly.fullname" . }}-web
+    app: {{ include "fairly.fullname" . }}-web
   ports:
     - port: {{ .Values.service.web.port }}
       targetPort: 80

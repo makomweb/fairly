@@ -45,9 +45,13 @@ final readonly class ErrorResponseSetter
 
     private static function getCode(\Throwable $exception): int
     {
-        return 0 !== $exception->getCode() && 600 > $exception->getCode()
-            ? $exception->getCode()
-            : Response::HTTP_INTERNAL_SERVER_ERROR;
+        $code = $exception->getCode();
+
+        if ($code >= 200 && $code < 600) {
+            return $code;
+        }
+
+        return Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
     private static function getType(\Throwable $exception): string

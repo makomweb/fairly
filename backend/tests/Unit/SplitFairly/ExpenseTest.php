@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\SplitFairly;
+namespace App\Tests\Unit\Fairly;
 
-use App\SplitFairly\Expense;
-use App\SplitFairly\Price;
+use App\Fairly\Expense;
+use App\Fairly\Price;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 

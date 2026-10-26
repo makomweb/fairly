@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\SplitFairly;
+namespace App\Tests\Unit\Fairly;
 
-use App\SplitFairly\Event;
+use App\Fairly\Event;
 use PHPUnit\Framework\TestCase;
 
 final class EventTest extends TestCase

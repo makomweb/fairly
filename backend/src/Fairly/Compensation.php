@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\SplitFairly;
+namespace App\Fairly;
 
 final class Compensation implements \Stringable
 {
@@ -41,6 +41,6 @@ final class Compensation implements \Stringable
 
     public function __toString(): string
     {
-        return sprintf('From: "%s" - to: "%s" - price: "%s"', $this->from, $this->to, $this->settlement);
+        return sprintf('💸 Compensation "%s" from: "%s" to: "%s"', $this->settlement, $this->from, $this->to);
     }
 }

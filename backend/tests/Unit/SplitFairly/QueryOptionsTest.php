@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\SplitFairly;
+namespace App\Tests\Unit\Fairly;
 
-use App\SplitFairly\QueryOptions;
+use App\Fairly\QueryOptions;
 use PHPUnit\Framework\TestCase;
 
 final class QueryOptionsTest extends TestCase

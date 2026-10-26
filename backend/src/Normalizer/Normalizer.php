@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Normalizer;
 
-use App\SplitFairly\DenormalizerInterface as ContractDenormalizerInterface;
-use App\SplitFairly\NormalizerInterface as ContractNormalizerInterface;
+use App\Fairly\DenormalizerInterface as ContractDenormalizerInterface;
+use App\Fairly\NormalizerInterface as ContractNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer as SymfonyAbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface as SymfonyDenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface as SymfonyNormalizerInterface;

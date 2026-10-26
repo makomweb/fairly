@@ -13,7 +13,7 @@ export function FormStatusMessages({ error, success }: FormStatusMessagesProps) 
       )}
 
       {success && (
-        <div className="rounded-lg bg-green-50 border border-green-200 p-4 text-green-700 text-sm font-medium">
+        <div className="rounded-lg bg-accent/10 border border-accent/20 p-4 text-accent text-sm font-medium">
           ✓ Expense tracked successfully!
         </div>
       )}

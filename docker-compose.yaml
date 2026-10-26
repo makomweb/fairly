@@ -1,5 +1,5 @@
 networks:
-    split-fairly:
+    fairly:
 services:
     web: 
         image: ${NGINX_IMAGE}
@@ -12,7 +12,7 @@ services:
             - app
             - worker
         networks:
-            - split-fairly
+            - fairly
     app:
         image: ${APP_IMAGE}
         ports:
@@ -29,7 +29,7 @@ services:
             ADMIN_EMAIL: ${ADMIN_EMAIL}
             ADMIN_PASSWORD: ${ADMIN_PASSWORD}
         networks:
-            - split-fairly
+            - fairly
     worker:
         image: ${APP_IMAGE}
         volumes:
@@ -54,7 +54,7 @@ services:
             ADMIN_EMAIL: ${ADMIN_EMAIL}
             ADMIN_PASSWORD: ${ADMIN_PASSWORD}
         networks:
-            - split-fairly
+            - fairly
     db:
         image: ${MYSQL_IMAGE}
         ports:
@@ -71,7 +71,7 @@ services:
             timeout: 5s
             retries: 55
         networks:
-            - split-fairly
+            - fairly
     db-admin:
         image: ${ADMINER_IMAGE}
         environment:
@@ -82,7 +82,7 @@ services:
             db:
                 condition: service_healthy
         networks:
-            - split-fairly
+            - fairly
     dashboard:
         image: ${DASHBOARD_IMAGE}
         volumes:
@@ -94,7 +94,7 @@ services:
         user: "1000:1001"
         restart: unless-stopped
         networks:
-            - split-fairly
+            - fairly
     npm-dev:
         image: ${NODE_IMAGE}
         working_dir: /var/www/frontend
@@ -108,6 +108,6 @@ services:
         environment:
             - CHOKIDAR_USEPOLLING=true
         networks:
-            - split-fairly
+            - fairly
 volumes:
     mysql_data: {}

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\SplitFairly;
+namespace App\Fairly;
 
 /**
  * Options to query the event store.

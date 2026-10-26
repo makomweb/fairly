@@ -3,8 +3,13 @@ import { useState, useRef } from 'react'
 import { AuthProvider, useAuth } from './features/auth/AuthContext'
 import { TrackExpense } from './features/expense/TrackExpense'
 import { Calculation } from './features/calculation/Calculation'
-import { Button } from './components/ui/button'
-import { HeartHandshake, Loader, Plus } from 'lucide-react'
+import { ErrorBoundary } from './components/ErrorBoundary'
+import { Header } from './components/Header'
+import { Sidebar } from './components/Sidebar'
+import { SettingsModal } from './components/SettingsModal'
+import { ToastProvider } from './components/ToastProvider'
+import { LoadingSpinner } from './components/LoadingSpinner'
+import { usePerformanceMetrics } from './hooks/usePerformanceMetrics'
 
 function AppContent() {
   const { user, logout, isLoading } = useAuth()
@@ -13,123 +18,144 @@ function AppContent() {
   const [isFormValid, setIsFormValid] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [hasUserSelected, setHasUserSelected] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const trackFormRef = useRef<{ submit: () => Promise<void> }>(null)
+
+  // Monitor Core Web Vitals in development
+  usePerformanceMetrics(process.env.NODE_ENV === 'development')
 
   if (isLoading) {
     return (
-      <div className="min-h-svh flex items-center justify-center">
-        <Loader className="h-8 w-8 animate-spin text-blue-600" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <LoadingSpinner message="Loading..." />
       </div>
     )
   }
 
-  // If no user, AuthContext will have already redirected to /login
   if (!user) {
     return null
   }
 
   return (
-    <div className="min-h-svh flex flex-col pb-safe">
-      {/* Sticky header */}
-      <header className="sticky top-0 z-20 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <HeartHandshake className="h-6 w-6 text-white" />
-            <h1 className="text-xl font-bold text-white">Split Fairly</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="text-white text-sm">
-              {user.email.length > 16 ? user.email.substring(0, 16) + '...' : user.email}
+    <div className="flex h-screen flex-col bg-background">
+      {/* Header */}
+      <Header
+        onMenuToggle={setMobileMenuOpen}
+        userEmail={user.email}
+        onLogout={logout}
+        isMobileMenuOpen={mobileMenuOpen}
+        onSettingsClick={() => setSettingsOpen(true)}
+      />
+
+      {/* Settings Modal */}
+      <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+
+      {/* Main Layout */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <Sidebar
+          isOpen={mobileMenuOpen}
+          activeTab={currentTab}
+          onNavigate={(tab) => {
+            setCurrentTab(tab)
+            setShowTrackForm(tab === 'track')
+            setMobileMenuOpen(false)
+          }}
+          onClose={() => setMobileMenuOpen(false)}
+        />
+
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto">
+          <div className="mx-auto w-full h-full max-w-6xl px-4 sm:px-6 lg:px-8 py-6">
+            {/* Content Area */}
+            <div className="h-full animate-in fade-in duration-300">
+              {currentTab === 'calculate' && (
+                <Calculation onUserSelected={setHasUserSelected} />
+              )}
+              
+              {currentTab === 'track' && showTrackForm && (
+                <TrackExpense 
+                  ref={trackFormRef}
+                  onComplete={() => setShowTrackForm(false)}
+                  onValidityChange={setIsFormValid}
+                  onLoadingChange={setIsSubmitting}
+                />
+              )}
+
+              {currentTab === 'track' && !showTrackForm && (
+                <div className="flex flex-col items-center justify-center min-h-[400px] text-center animate-in fade-in">
+                  <div className="space-y-4">
+                    <div className="text-5xl">✨</div>
+                    <p className="text-lg font-medium text-foreground">No expenses yet</p>
+                    <p className="text-sm text-muted-foreground mb-6">
+                      Start by adding your first expense
+                    </p>
+                    <button
+                      onClick={() => setShowTrackForm(true)}
+                      className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-all active:scale-95"
+                    >
+                      Add Expense
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
-            <Button 
-              onClick={() => logout()}
-              variant="secondary" 
-              size="sm"
-            >
-              Logout
-            </Button>
           </div>
-        </div>
-      </header>
-      
-      {/* Main content */}
-      <div className="flex-1">
-        {currentTab === 'calculate' && (
-          <Calculation onUserSelected={setHasUserSelected} />
-        )}
-        {currentTab === 'track' && !showTrackForm && (
-          <div className="w-full p-4 md:p-6 flex items-center justify-center min-h-full">
-            <div className="text-center text-muted-foreground">
-              <p>Use the "+ Track" button to add a new expense</p>
-            </div>
-          </div>
-        )}
-        {showTrackForm && (
-          <TrackExpense 
-            ref={trackFormRef}
-            onComplete={() => setShowTrackForm(false)}
-            onValidityChange={setIsFormValid}
-            onLoadingChange={setIsSubmitting}
-          />
-        )}
+        </main>
       </div>
 
-      {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 border-t bg-white shadow-lg">
-        <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
+      {/* Mobile Bottom Navigation (< md breakpoint) */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card">
+        <div className="flex items-center justify-around h-16">
           <button
             onClick={() => {
-              if (showTrackForm && isFormValid && !isSubmitting) {
-                // If tracking and form is valid, submit it
-                trackFormRef.current?.submit()
-              } else {
-                // Otherwise navigate to tracking view
-                setShowTrackForm(true)
-                setCurrentTab('track')
-                // Focus on what input after state updates
-                setTimeout(() => {
-                  trackFormRef.current?.focus?.()
-                }, 0)
-              }
+              setCurrentTab('track')
+              setShowTrackForm(true)
+              setMobileMenuOpen(false)
             }}
-            className={`flex-1 h-12 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 text-sm ${
-              showTrackForm
-                ? isFormValid
-                  ? 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
-                  : 'bg-blue-200 text-blue-600 cursor-default opacity-75'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            className={`flex flex-col items-center justify-center w-full h-full gap-1 text-xs font-medium transition-colors ${
+              currentTab === 'track'
+                ? 'text-primary bg-muted/30'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            {showTrackForm ? (isSubmitting ? 'Saving...' : '➕ Track') : '➕ Track'}
+            <span className="text-lg">➕</span>
+            <span>Track</span>
           </button>
           
           <button
             onClick={() => {
               setCurrentTab('calculate')
               setShowTrackForm(false)
+              setMobileMenuOpen(false)
             }}
-            className={`flex-1 h-12 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 text-sm ${
+            className={`flex flex-col items-center justify-center w-full h-full gap-1 text-xs font-medium transition-colors ${
               currentTab === 'calculate'
-                ? hasUserSelected
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-blue-200 text-blue-600 opacity-75'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'text-primary bg-muted/30'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            📊 Calculate
+            <span className="text-lg">📊</span>
+            <span>Calculate</span>
           </button>
         </div>
-      </div>
+      </nav>
+
+      {/* Padding for mobile bottom nav */}
+      <div className="md:hidden h-16 pointer-events-none" />
     </div>
   )
 }
 
 export default function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <ToastProvider>
+          <AppContent />
+        </ToastProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   )
 }
-
-
