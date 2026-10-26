@@ -137,7 +137,7 @@ code-style:
 test: test-backend test-frontend
 
 backend-test: test-backend
-test-backend:
+test-backend: init-test
 	@echo "🧪 Running backend tests..."
 	docker compose exec -it app bin/phpunit
 
