@@ -1,7 +1,7 @@
 # Split Fairly
 
-![app-ci-workflow](https://github.com/makomweb/split-fairly/actions/workflows/app-ci.yaml/badge.svg)
-[![codecov](https://codecov.io/gh/makomweb/split-fairly/graph/badge.svg?token=O6WQ8USL6T)](https://codecov.io/gh/makomweb/split-fairly)
+![app-ci-workflow](https://github.com/makomweb/fairly/actions/workflows/app-ci.yaml/badge.svg)
+[![codecov](https://codecov.io/gh/makomweb/fairly/graph/badge.svg?token=O6WQ8USL6T)](https://codecov.io/gh/makomweb/fairly)
 
 ## Goal
 
@@ -99,7 +99,7 @@ helm upgrade --install app ./helm
 # Access the application via NodePort:
 # Link: http://localhost:30190
 # Or configure port forwarding via:
-kubectl port-forward svc/app-split-fairly-web 8080:80
+kubectl port-forward svc/app-fairly-web 8080:80
 # Link: http://localhost:8080
 
 # View logs for all pods with the PHP label (app + worker)

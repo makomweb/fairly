@@ -61,7 +61,7 @@ export function DownloadReportButton({id}: Props) {
         const url = URL.createObjectURL(blob)
         const a = document.createElement('a')
         a.href = url
-        a.download = 'split-fairly-calculation.pdf'
+        a.download = 'fairly-calculation.pdf'
         a.click()
         URL.revokeObjectURL(url)
       }

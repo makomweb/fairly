@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "split-fairly.fullname" . }}-db-init
+  name: {{ include "fairly.fullname" . }}-db-init
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -12,7 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ include "split-fairly.fullname" . }}-db-init
+        app: {{ include "fairly.fullname" . }}-db-init
     spec:
       serviceAccountName: default
       restartPolicy: Never
@@ -25,7 +25,7 @@ spec:
             - -c
             - |
               echo "Waiting for MySQL to be ready..."
-              until nc -z {{ include "split-fairly.fullname" . }}-db {{ .Values.service.mysql.port }}; do
+              until nc -z {{ include "fairly.fullname" . }}-db {{ .Values.service.mysql.port }}; do
                 echo "MySQL not ready, waiting..."
                 sleep 2
               done

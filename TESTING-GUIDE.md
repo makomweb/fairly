@@ -1,4 +1,4 @@
-# 🚀 Quick Start - Modernisierte Split-Fairly App
+# 🚀 Quick Start - Modernisierte Fairly App
 
 ## Was ist neu?
 

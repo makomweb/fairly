@@ -1,4 +1,4 @@
-APP_NAME = split-fairly
+APP_NAME = fairly
 VERSION = 0.1.5
 
 .DEFAULT_GOAL := help

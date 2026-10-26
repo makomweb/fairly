@@ -5,11 +5,11 @@ replicaCount:
 
 image:
   app:
-    repository: "split-fairly"
+    repository: "fairly"
     tag: "0.1.5"
     pullPolicy: IfNotPresent
   web:
-    repository: "split-fairly-web"
+    repository: "fairly-web"
     tag: "0.1.5"
     pullPolicy: IfNotPresent
   mysql:
@@ -43,7 +43,7 @@ env:
   APP_SECRET: "F3E46580-5F9A-4524-B218-90490B033192"
   APP_ENV: "prod"
   APP_VERSION: "0.1.5"
-  DATABASE_URL: "mysql://{{ .Values.mysql.user }}:{{ .Values.mysql.password }}@{{ include \"split-fairly.fullname\" . }}-db:{{ .Values.service.mysql.port }}/{{ default \"app\" .Values.mysql.database }}?serverVersion=8.0.31&charset=utf8mb4"
+  DATABASE_URL: "mysql://{{ .Values.mysql.user }}:{{ .Values.mysql.password }}@{{ include \"fairly.fullname\" . }}-db:{{ .Values.service.mysql.port }}/{{ default \"app\" .Values.mysql.database }}?serverVersion=8.0.31&charset=utf8mb4"
   ADMIN_EMAIL: "admin@example.com"
   ADMIN_PASSWORD: "secret"
 
@@ -85,7 +85,7 @@ webConfig: |
 
       # API endpoints - directly proxy to PHP
       location ^~ /api/ {
-          fastcgi_pass {{ include "split-fairly.fullname" . }}-app:9000;
+          fastcgi_pass {{ include "fairly.fullname" . }}-app:9000;
           fastcgi_split_path_info ^(.+\.php)(/.*)$;
           include fastcgi_params;
           fastcgi_param SCRIPT_FILENAME $document_root/index.php;
@@ -102,7 +102,7 @@ webConfig: |
 
       # PHP-FPM handling for internal redirect to index.php
       location ~ ^/index\.php(/|$) {
-          fastcgi_pass {{ include "split-fairly.fullname" . }}-app:9000;
+          fastcgi_pass {{ include "fairly.fullname" . }}-app:9000;
           fastcgi_split_path_info ^(.+\.php)(/.*)$;
           include fastcgi_params;
           fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;

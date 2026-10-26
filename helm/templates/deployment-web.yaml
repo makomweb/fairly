@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "split-fairly.fullname" . }}-web
+  name: {{ include "fairly.fullname" . }}-web
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -9,11 +9,11 @@ spec:
   replicas: {{ .Values.replicaCount.web }}
   selector:
     matchLabels:
-      app: {{ include "split-fairly.fullname" . }}-web
+      app: {{ include "fairly.fullname" . }}-web
   template:
     metadata:
       labels:
-        app: {{ include "split-fairly.fullname" . }}-web
+        app: {{ include "fairly.fullname" . }}-web
     spec:
       containers:
         - name: nginx
@@ -29,4 +29,4 @@ spec:
       volumes:
         - name: nginx-config
           configMap:
-            name: {{ include "split-fairly.fullname" . }}-nginx
+            name: {{ include "fairly.fullname" . }}-nginx

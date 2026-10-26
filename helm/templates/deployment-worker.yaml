@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "split-fairly.fullname" . }}-worker
+  name: {{ include "fairly.fullname" . }}-worker
   labels:
     app.kubernetes.io/name: {{ .Chart.Name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -9,11 +9,11 @@ spec:
   replicas: {{ .Values.replicaCount.worker }}
   selector:
     matchLabels:
-      app: {{ include "split-fairly.fullname" . }}-worker
+      app: {{ include "fairly.fullname" . }}-worker
   template:
     metadata:
       labels:
-        app: {{ include "split-fairly.fullname" . }}-worker
+        app: {{ include "fairly.fullname" . }}-worker
         component: worker
         technology: php
         app.kubernetes.io/version: "{{ .Values.env.APP_VERSION }}"
@@ -21,7 +21,7 @@ spec:
       annotations:
         kubernetes.io/log-format: "json"
     spec:
-      serviceAccountName: {{ include "split-fairly.fullname" . }}
+      serviceAccountName: {{ include "fairly.fullname" . }}
       terminationGracePeriodSeconds: 3600
       initContainers:
         - name: wait-for-db-init
@@ -31,8 +31,8 @@ spec:
             - -c
             - |
               echo "Waiting for database initialization job to complete..."
-              until kubectl get job {{ include "split-fairly.fullname" . }}-db-init -o jsonpath='{.status.succeeded}' 2>/dev/null | grep -q '1'; do
-                STATUS=$(kubectl get job {{ include "split-fairly.fullname" . }}-db-init -o jsonpath='{.status.conditions[?(@.type=="Complete")].status}' 2>/dev/null || echo "NotFound")
+              until kubectl get job {{ include "fairly.fullname" . }}-db-init -o jsonpath='{.status.succeeded}' 2>/dev/null | grep -q '1'; do
+                STATUS=$(kubectl get job {{ include "fairly.fullname" . }}-db-init -o jsonpath='{.status.conditions[?(@.type=="Complete")].status}' 2>/dev/null || echo "NotFound")
                 if [ "$STATUS" = "True" ]; then
                   echo "Database initialization completed successfully!"
                   exit 0

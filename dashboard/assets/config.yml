@@ -44,7 +44,7 @@ services:
       - name: "Source code"
         subtitle: "Github"
         icon: "fa-brands fa-github"
-        url: "https://github.com/makomweb/split-fairly"
+        url: "https://github.com/makomweb/fairly"
         target: "_blank"
       - name: "Code coverage"
         subtitle: "PHPUnit coverage"
