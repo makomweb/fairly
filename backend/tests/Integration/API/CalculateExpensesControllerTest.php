@@ -23,11 +23,15 @@ class CalculateExpensesControllerTest extends WebTestCase
         /** @var UserPasswordHasherInterface $passwordHasher */
         $passwordHasher = $container->get(UserPasswordHasherInterface::class);
 
-        $user1 = User::create('user1@example.com', ['ROLE_USER']);
+        $uniqueId = uniqid();
+        $user1Email = "user1-{$uniqueId}@example.com";
+        $user2Email = "user2-{$uniqueId}@example.com";
+
+        $user1 = User::create($user1Email, ['ROLE_USER']);
         $hashedPassword = $passwordHasher->hashPassword($user1, 'password123');
         $user1->setPassword($hashedPassword);
 
-        $user2 = User::create('user2@example.com', ['ROLE_USER']);
+        $user2 = User::create($user2Email, ['ROLE_USER']);
         $hashedPassword2 = $passwordHasher->hashPassword($user2, 'password123');
         $user2->setPassword($hashedPassword2);
 
@@ -40,13 +44,13 @@ class CalculateExpensesControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/login');
         $form = $crawler->selectButton('Sign In')->form([
-            '_username' => 'user1@example.com',
+            '_username' => $user1Email,
             '_password' => 'password123',
         ]);
         $client->submit($form);
         $client->followRedirect();
 
-        $client->request('GET', '/api/calculate');
+        $client->request('GET', '/api/calculate?with_user='.urlencode($user2Email));
 
         self::assertResponseIsSuccessful();
 
