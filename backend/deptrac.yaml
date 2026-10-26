@@ -12,7 +12,7 @@ deptrac:
         - type: classLike
           value: .*Psr\\.*
         - type: classLike
-          value: .*App\\SplitFairly\\.*
+          value: .*App\\Fairly\\.*
         - type: classLike
           value: .*Symfony\\Component\\Uid\\.*
     - name: Generic

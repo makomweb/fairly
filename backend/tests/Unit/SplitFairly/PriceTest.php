@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\SplitFairly;
+namespace App\Tests\Unit\Fairly;
 
-use App\SplitFairly\Price;
+use App\Fairly\Price;
 use PHPUnit\Framework\TestCase;
 
 final class PriceTest extends TestCase

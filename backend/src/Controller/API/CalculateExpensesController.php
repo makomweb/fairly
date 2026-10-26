@@ -6,7 +6,7 @@ use App\Async\Stopwatch;
 use App\Entity\User;
 use App\Instrumentation\InstrumentationHolder;
 use App\Repository\UserRepository;
-use App\SplitFairly\CalculateCompensation;
+use App\Fairly\CalculateCompensation;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

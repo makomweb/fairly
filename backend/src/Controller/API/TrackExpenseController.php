@@ -3,8 +3,8 @@
 namespace App\Controller\API;
 
 use App\Repository\UserRepository;
-use App\SplitFairly\Expense;
-use App\SplitFairly\ExpenseTracker;
+use App\Fairly\Expense;
+use App\Fairly\ExpenseTracker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

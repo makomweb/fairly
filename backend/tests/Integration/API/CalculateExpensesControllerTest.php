@@ -4,8 +4,8 @@ namespace App\Tests\Integration\API;
 
 use App\Entity\Event;
 use App\Entity\User;
-use App\SplitFairly\Expense;
-use App\SplitFairly\Price;
+use App\Fairly\Expense;
+use App\Fairly\Price;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;

@@ -3,10 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Event as EventEntity;
-use App\SplitFairly\CurrentUserInterface;
-use App\SplitFairly\Event as DomainEvent;
-use App\SplitFairly\EventStoreInterface;
-use App\SplitFairly\QueryOptions as Options;
+use App\Fairly\CurrentUserInterface;
+use App\Fairly\Event as DomainEvent;
+use App\Fairly\EventStoreInterface;
+use App\Fairly\QueryOptions as Options;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
