@@ -36,7 +36,7 @@ jobs:
         run: composer install --prefer-dist --no-scripts
 
       - name: Run static code analysis
-        run: vendor/bin/phpstan analyse --memory-limit=1G
+        run: vendor/bin/phpstan analyse src tests --memory-limit=1G
 
       - name: Run code style checks
         run: vendor/bin/php-cs-fixer check
