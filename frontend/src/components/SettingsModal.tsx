@@ -20,7 +20,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
       />
 
       {/* Modal */}
-      <div className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-96 bg-card border border-border rounded-lg shadow-lg z-50 overflow-y-auto max-h-[90vh] md:max-h-none animate-in fade-in slide-in-from-bottom-4 md:slide-in-from-bottom-0 duration-300">
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] md:w-96 bg-card border border-border rounded-lg shadow-lg z-50 overflow-y-auto max-h-[90vh] animate-in fade-in duration-300">
         {/* Header */}
         <div className="sticky top-0 flex items-center justify-between p-6 border-b border-border bg-card">
           <h2 className="text-xl font-semibold text-foreground">Settings</h2>
