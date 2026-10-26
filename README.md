@@ -43,6 +43,14 @@ make help     # Show all available targets
 
 Visit `http://localhost:8000` in your browser.
 
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for:
+- Running tests
+- Code style and quality checks
+- Database migrations
+- Development workflow
+
 ## Architecture
 
 ```
