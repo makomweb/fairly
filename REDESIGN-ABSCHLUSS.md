@@ -6,7 +6,7 @@
 
 #### B1: Header Component
 - Modern sticky header mit Hintergrund und Blur-Effekt
-- Logo + Brand Name (Split Fairly)
+- Logo + Brand Name (Fairly)
 - Theme Switcher für Light/Dark Mode
 - User Dropdown Menu mit Logout
 - Responsive Design (Mobile: Hamburger Button)

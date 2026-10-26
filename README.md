@@ -1,4 +1,4 @@
-# Split Fairly
+# Fairly
 
 ![app-ci-workflow](https://github.com/makomweb/fairly/actions/workflows/app-ci.yaml/badge.svg)
 [![codecov](https://codecov.io/gh/makomweb/fairly/graph/badge.svg?token=O6WQ8USL6T)](https://codecov.io/gh/makomweb/fairly)

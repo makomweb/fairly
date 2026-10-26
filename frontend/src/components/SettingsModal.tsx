@@ -59,7 +59,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               About
             </h3>
             <div className="text-sm text-muted-foreground space-y-2 p-4 rounded-lg bg-muted/30">
-              <p><strong>Split Fairly</strong> v1.0.0</p>
+              <p><strong>Fairly</strong> v1.0.0</p>
               <p>Fairly split expenses with friends and manage settlements.</p>
               <p className="text-xs mt-4 pt-4 border-t border-border">
                 All data is stored securely on our servers.

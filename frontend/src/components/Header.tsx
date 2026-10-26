@@ -40,7 +40,7 @@ export function Header({
               <span className="text-primary-foreground font-bold text-lg">$</span>
             </div>
             <h1 className="text-lg font-bold text-foreground hidden sm:inline">
-              Split Fairly
+              Fairly
             </h1>
           </div>
         </div>
