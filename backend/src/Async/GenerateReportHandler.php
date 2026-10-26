@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Async;
 
 use App\Entity\Report;
+use App\Fairly\Calculator;
+use App\Fairly\Compensation;
 use App\Instrumentation\Instrumentation;
 use App\Invariant\Ensure;
 use App\Repository\ReportRepository;
-use App\Fairly\Calculator;
-use App\Fairly\Compensation;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;

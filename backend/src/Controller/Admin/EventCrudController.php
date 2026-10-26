@@ -3,8 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Event as EventEntity;
-use App\Form\DataTransformer\JsonToStringTransformer;
 use App\Fairly\EventStoreInterface;
+use App\Form\DataTransformer\JsonToStringTransformer;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
