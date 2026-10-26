@@ -11,7 +11,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
-use SensitiveParameter;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -126,7 +125,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(#[SensitiveParameter] string $password): void
+    public function setPassword(#[\SensitiveParameter] string $password): void
     {
         assert(!empty($password));
 

@@ -54,10 +54,10 @@ class Report
     public function setStatus(string $status): self
     {
         assert(in_array($status, [self::STATUS_COMPLETED, self::STATUS_FAILED, self::STATUS_GENERATING, self::STATUS_PENDING]));
-        
+
         $this->status = $status;
 
-        if ($status === self::STATUS_COMPLETED) {
+        if (self::STATUS_COMPLETED === $status) {
             $this->completedAt = new \DateTimeImmutable();
         }
 
