@@ -28,4 +28,10 @@ yarn-error.log
 /.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###
 
-.deptrac.cache
+###> deptrac/deptrac ###
+/.deptrac.cache
+###< deptrac/deptrac ###
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###
