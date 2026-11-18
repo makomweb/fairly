@@ -50,7 +50,7 @@ final class Expenses
                 $foundKey = null;
 
                 foreach ($carry as $key => $category) {
-                    assert($category instanceof Category);
+                    /** @var Category $category */
                     if ($category->type === $expense->type) {
                         $found = $category;
                         $foundKey = $key;
