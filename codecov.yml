@@ -1,5 +1,5 @@
 fixes:
-  - "/var/www/project/src/::src/"
+  - "/var/www/project/::"
 
 coverage:
   status:
@@ -14,5 +14,5 @@ coverage:
 flags:
   core:
     paths:
-      - src/Fairly/
+      - backend/src/Fairly/
     carryforward: true
