@@ -10,7 +10,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Multi--stage-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-Helm-326CE5?logo=kubernetes&logoColor=white)](https://helm.sh/)
 ![app-ci-workflow](https://github.com/makomweb/fairly/actions/workflows/app-ci.yaml/badge.svg)
-[![codecov](https://img.shields.io/codecov/c/github/makomweb/fairly?flag=core&logo=codecov&token=O6WQ8USL6T)](https://codecov.io/gh/makomweb/fairly?flags[0]=core)
+[![codecov](https://codecov.io/gh/makomweb/fairly/graph/badge.svg?token=O6WQ8USL6T&flag=core)](https://codecov.io/gh/makomweb/fairly?flags[0]=core)
 
 </div>
 

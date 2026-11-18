@@ -7,8 +7,6 @@ coverage:
         target: 100%
         flags:
           - core
-fixes:
-  - "/var/www/project/::"
 
 flags:
   core:
