@@ -1,0 +1,18 @@
+fixes:
+  - "/var/www/project/src/::src/"
+
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+      core:
+        target: 100%
+        flags:
+          - core
+
+flags:
+  core:
+    paths:
+      - src/Fairly/
+    carryforward: true
