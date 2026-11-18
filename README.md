@@ -9,6 +9,7 @@
 [![PHP Version](https://img.shields.io/badge/PHP-8.4-777BB4.svg?logo=php&logoColor=white)](https://www.php.net/)
 [![Docker](https://img.shields.io/badge/Docker-Multi--stage-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-Helm-326CE5?logo=kubernetes&logoColor=white)](https://helm.sh/)
+
 ![app-ci-workflow](https://github.com/makomweb/fairly/actions/workflows/app-ci.yaml/badge.svg)
 [![Core Coverage](https://img.shields.io/codecov/c/github/makomweb/fairly/master.svg?flag=core&token=O6WQ8USL6T)](https://app.codecov.io/gh/makomweb/fairly)
 

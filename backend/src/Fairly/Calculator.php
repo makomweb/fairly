@@ -49,19 +49,17 @@ final readonly class Calculator
      */
     private function reduce(array $expenses, Event $event): array
     {
+        /** @var Expenses $found */
         $found = array_find(
             $expenses,
             static fn (Expenses $expense): bool => $expense->userUuid === $event->createdBy
         );
 
-        assert($found instanceof Expenses);
-
+        /** @var Expense $expense */
         $expense = $this->denormalizer->fromArray(
             $event->payload,
             Expense::class
         );
-
-        assert($expense instanceof Expense);
 
         $found->add($expense);
 

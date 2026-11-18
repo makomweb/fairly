@@ -56,12 +56,11 @@ final readonly class CalculateCompensation
 
     private function reduce(Expenses $expenses, Event $event): Expenses
     {
+        /** @var Expense $expense */
         $expense = $this->denormalizer->fromArray(
             $event->payload,
             Expense::class
         );
-
-        assert($expense instanceof Expense);
 
         $expenses->add($expense);
 
